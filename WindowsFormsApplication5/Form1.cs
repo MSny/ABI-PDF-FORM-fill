@@ -29,6 +29,7 @@ namespace WindowsFormsApplication5
     {
         string PDFPath;
         string CSVPath;
+        string path = "C:\\Users\\Meir\\Downloads\\ABISample\\Outputsample.pdf";
         List<string[]> parsedCSVData = new List<string[]>();
         List<object[]> parsedPDFData = new List<object[]>();
         List<object> pdftextFields = new List<object>();
@@ -100,10 +101,12 @@ namespace WindowsFormsApplication5
 
         private void button3_Click(object sender, EventArgs e)
         {
-          
-                // 3. Filling the acroform fields...
-          
-                foreach (Field currentField in pdfForm.Fields.Values)
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.ShowDialog();
+            path = saveFileDialog1.FileName;
+            // 3. Filling the acroform fields...
+
+            foreach (Field currentField in pdfForm.Fields.Values)
                 {
                     Console.Write(currentField);
                 if (currentField is org.pdfclown.documents.interaction.forms.CheckBox)
@@ -124,10 +127,10 @@ namespace WindowsFormsApplication5
                              
                 else
                              {
-                               /*  CSVData = parsedCSVData[count][0];  // Arbitrary value (just to get something to fill with).
+                                 CSVData = parsedCSVData[count][0];  // Arbitrary value (just to get something to fill with).
                                  Console.Write(CSVData);
                                  currentField.Value = CSVData;
-                                 count++; */
+                                 count++; 
                              }
                              
                     }
@@ -138,7 +141,7 @@ namespace WindowsFormsApplication5
                 try
                 {
                     //outputPath = @"C:\Users\Meir\Downloads\ABISample\OutputSample.pdf";
-                    pdfForm.File.Save(SerializationModeEnum.Standard);
+                    pdfForm.File.Save(path, SerializationModeEnum.Standard);
                 }
                 catch (Exception z)
                 {
@@ -147,6 +150,8 @@ namespace WindowsFormsApplication5
                 }
                 Console.WriteLine("\nFile Created: ");
             }
-        }
+
+       
+    }
     }
 
