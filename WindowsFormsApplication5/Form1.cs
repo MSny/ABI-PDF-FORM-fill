@@ -27,13 +27,12 @@ namespace WindowsFormsApplication5
 {
     public partial class Form1 : System.Windows.Forms.Form
     {
-        string[] files;
         string PDFPath;
         string CSVPath;
-        Document PDFfields;
-        string outputPath;
         List<string[]> parsedCSVData = new List<string[]>();
-        List<string[]> parsedPDFData = new List<string[]>();
+        List<object[]> parsedPDFData = new List<object[]>();
+        List<object> pdftextFields = new List<object>();
+        dynamic pdfForm;
         string CSVData;
         int count = 5;
         public Form1()
@@ -41,73 +40,27 @@ namespace WindowsFormsApplication5
             InitializeComponent();
         }
 
-
+        //Select Pdf 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
             //this.Activate();
             // files = openFileDialog1.FileNames; 
            // DialogResult result = openFileDialog1.ShowDialog();
             this.PDFPath = openFileDialog1.FileName;
-            org.pdfclown.files.File file = new org.pdfclown.files.File(this.PDFPath);
-            Document PDFfields = file.Document;
+            org.pdfclown.files.File outputfile = new org.pdfclown.files.File(this.PDFPath);
+            Document PDFfields = outputfile.Document;
             // 2. Get the acroform!
             org.pdfclown.documents.interaction.forms.Form form = PDFfields.Form;
+            pdfForm = PDFfields.Form;
             Console.Write(PDFfields);
             if (!form.Exists())
                 Console.WriteLine("No form available");
             else
             {
-
-                // foreach (string field in document.Form.Fields.Values)
-                //   parsedPDFData.Add();
-                Console.WriteLine("Please select what data you would like");
+                Console.WriteLine("Form Selected");
                 // 3. Filling the acroform fields...
-
-
-                //foreach (KeyValuePair<string, Field> currentField in form.Fields)
-                foreach (Field currentField in form.Fields.Values)
-                {
-                    Console.Write(currentField);
-                    if (currentField is org.pdfclown.documents.interaction.forms.CheckBox)
-                    {
-                        org.pdfclown.documents.interaction.forms.CheckBox localCast = (org.pdfclown.documents.interaction.forms.CheckBox)currentField;
-                        localCast.Checked = true;
-                        continue;
-                        //     String value;
-                        /*     if (field is org.pdfclown.documents.interaction.forms.RadioButton)
-                             {
-                                 value = ((DualWidget)field.Widgets[0]).WidgetName;
-                             } // Selects the first widget in the group.
-                             else if (field is ChoiceField)
-                             {
-                                 value = ((ChoiceField)field).Items[0].Value;
-                             } // Selects the first item in the list.
-                             
-                             else
-                             {
-                                // CSVData = parsedCSVData[count][0];  // Arbitrary value (just to get something to fill with).
-                                // Console.Write(CSVData);
-                                // field.Value = CSVData;
-                                // count++;
-                             }
-                             */
-                    }
-                }
-                    // 4. Serialize the PDF file!
-
-
-                try
-                {
-                    //outputPath = @"C:\Users\Meir\Downloads\ABISample\OutputSample.pdf";
-                    file.Save(SerializationModeEnum.Standard);
-                }
-                catch (Exception z)
-                {
-                    Console.WriteLine("File writing failed: " + z.Message);
-                    Console.WriteLine(z.StackTrace);
-                }
-                Console.WriteLine("\nFile Created: ");
             }
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -117,15 +70,12 @@ namespace WindowsFormsApplication5
 
         private void button2_Click(object sender, EventArgs e)
         {
-
-            // DialogResult result = openFileDialog2.ShowDialog(); // Show the dialog.
             openFileDialog2.ShowDialog();
         }
-
+        
+        //Select Data
         private void openFileDialog2_FileOk(object sender, CancelEventArgs e)
         {
-            //this.Activate();
-            //files = openFileDialog1.FileNames;
             this.CSVPath = openFileDialog2.FileName;
             TextFieldParser parser = new TextFieldParser(this.CSVPath);
             parser.TextFieldType = FieldType.Delimited;
@@ -150,53 +100,45 @@ namespace WindowsFormsApplication5
 
         private void button3_Click(object sender, EventArgs e)
         {
-          /*  if (!form.Exists())
-                Console.WriteLine("No form available");
-            else
-            {
-
-                // foreach (string field in document.Form.Fields.Values)
-                //   parsedPDFData.Add();
-                Console.WriteLine("Please select what data you would like");
-                // 3. Filling the acroform fields...
-
-
           
-                foreach (Field currentField in form.Fields.Values)
+                // 3. Filling the acroform fields...
+          
+                foreach (Field currentField in pdfForm.Fields.Values)
                 {
                     Console.Write(currentField);
-                    if (currentField is org.pdfclown.documents.interaction.forms.CheckBox)
+                if (currentField is org.pdfclown.documents.interaction.forms.CheckBox)
                     {
-                        org.pdfclown.documents.interaction.forms.CheckBox localCast = (org.pdfclown.documents.interaction.forms.CheckBox)currentField;
-                        localCast.Checked = true;
-                        continue;
-                        //     String value;
-                        /*     if (field is org.pdfclown.documents.interaction.forms.RadioButton)
+                    org.pdfclown.documents.interaction.forms.CheckBox localCast = (org.pdfclown.documents.interaction.forms.CheckBox)currentField;
+                    localCast.Checked = true;
+                    continue;
+                    }
+                else if (currentField is org.pdfclown.documents.interaction.forms.RadioButton)
                              {
-                                 value = ((DualWidget)field.Widgets[0]).WidgetName;
+                    org.pdfclown.documents.interaction.forms.RadioButton localCast = (org.pdfclown.documents.interaction.forms.RadioButton)currentField;
+                    currentField.Value = ((DualWidget)currentField.Widgets[0]).WidgetName;
                              } // Selects the first widget in the group.
-                             else if (field is ChoiceField)
+                else if (currentField is ChoiceField)
                              {
-                                 value = ((ChoiceField)field).Items[0].Value;
+                                 currentField.Value = ((ChoiceField)currentField).Items[0].Value;
                              } // Selects the first item in the list.
                              
-                             else
+                else
                              {
-                                // CSVData = parsedCSVData[count][0];  // Arbitrary value (just to get something to fill with).
-                                // Console.Write(CSVData);
-                                // field.Value = CSVData;
-                                // count++;
+                               /*  CSVData = parsedCSVData[count][0];  // Arbitrary value (just to get something to fill with).
+                                 Console.Write(CSVData);
+                                 currentField.Value = CSVData;
+                                 count++; */
                              }
                              
                     }
-                }
+                
                 // 4. Serialize the PDF file!
 
 
                 try
                 {
                     //outputPath = @"C:\Users\Meir\Downloads\ABISample\OutputSample.pdf";
-                    file.Save(SerializationModeEnum.Standard);
+                    pdfForm.File.Save(SerializationModeEnum.Standard);
                 }
                 catch (Exception z)
                 {
@@ -205,8 +147,6 @@ namespace WindowsFormsApplication5
                 }
                 Console.WriteLine("\nFile Created: ");
             }
-        }*/
-    }
-}
+        }
     }
 
