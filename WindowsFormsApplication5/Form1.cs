@@ -10,14 +10,10 @@ using System.Threading.Tasks;
 using System.IO;
 
 
-using org.pdfclown.documents;
-using org.pdfclown.documents.contents.composition;
-using org.pdfclown.documents.contents.entities;
-using org.pdfclown.documents.contents.fonts;
-using org.pdfclown.documents.contents.xObjects;
-using org.pdfclown.documents.interaction.annotations;
-using org.pdfclown.documents.interaction.forms;
-using org.pdfclown.files;
+using iTextSharp;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.text.xml;
 using System.Windows.Forms;
 
 using Microsoft.VisualBasic;
@@ -35,7 +31,8 @@ namespace WindowsFormsApplication5
         List<object> pdftextFields = new List<object>();
         dynamic pdfForm;
         string CSVData;
-        int count = 5;
+        List<string> formsNtype = new List<string>();
+        int count = 0;
         public Form1()
         {
             InitializeComponent();
@@ -44,25 +41,54 @@ namespace WindowsFormsApplication5
         //Select Pdf 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            //this.Activate();
-            // files = openFileDialog1.FileNames; 
-           // DialogResult result = openFileDialog1.ShowDialog();
+           
             this.PDFPath = openFileDialog1.FileName;
-            org.pdfclown.files.File outputfile = new org.pdfclown.files.File(this.PDFPath);
-            Document PDFfields = outputfile.Document;
+            PdfReader reader = new PdfReader(this.PDFPath);
+            AcroFields form = reader.AcroFields;
+            pdfForm = reader;
             // 2. Get the acroform!
-            org.pdfclown.documents.interaction.forms.Form form = PDFfields.Form;
-            pdfForm = PDFfields.Form;
-            Console.Write(PDFfields);
-            if (!form.Exists())
+           
+            if (pdfForm == null)
                 Console.WriteLine("No form available");
             else
             {
+                try
+                {
+                    foreach (KeyValuePair<string, AcroFields.Item> kvp in form.Fields)
+                    {
+                        switch (form.GetFieldType(kvp.Key))
+                        {
+                            case AcroFields.FIELD_TYPE_CHECKBOX:
+                            case AcroFields.FIELD_TYPE_COMBO:
+                            case AcroFields.FIELD_TYPE_LIST:
+                            case AcroFields.FIELD_TYPE_RADIOBUTTON:
+                            case AcroFields.FIELD_TYPE_NONE:
+                            case AcroFields.FIELD_TYPE_PUSHBUTTON:
+                            case AcroFields.FIELD_TYPE_SIGNATURE:
+                            case AcroFields.FIELD_TYPE_TEXT:
+                                int fileType = form.GetFieldType(kvp.Key);
+                                string fieldValue = form.GetField(kvp.Key);
+                                string translatedFileName = form.GetTranslatedFieldName(kvp.Key);
+                                formsNtype.Add(translatedFileName);
+                                break;
+                        }
+                    }
+                
+                }
+                catch
+                {
+                }
+                    /*finally
+                {
+                reader.Close();
+                }*/
                 Console.WriteLine("Form Selected");
                 // 3. Filling the acroform fields...
+                }
+                
+
             }
 
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -104,6 +130,31 @@ namespace WindowsFormsApplication5
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
             saveFileDialog1.ShowDialog();
             path = saveFileDialog1.FileName;
+
+            using (PdfStamper stamper = new PdfStamper(pdfForm, new FileStream(path, FileMode.Create)))
+            {
+                AcroFields fields = stamper.AcroFields;
+
+                // set form fields
+                foreach (KeyValuePair<string, AcroFields.Item> kvp in fields.Fields)
+                {
+                    count++;
+                    fields.SetField(formsNtype[count-1], "TODAY");
+                    
+                }
+               
+               // fields.SetField("BOILER", "HOT");
+                //fields.SetField("", "12345");
+                //fields.SetField("email", "johndoe@xxx.com");
+
+                // flatten form fields and close document
+                stamper.FormFlattening = true;
+                stamper.Close();
+            }
+            /*
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.ShowDialog();
+            path = saveFileDialog1.FileName;
             // 3. Filling the acroform fields...
 
             foreach (Field currentField in pdfForm.Fields.Values)
@@ -135,23 +186,12 @@ namespace WindowsFormsApplication5
                              
                     }
                 
-                // 4. Serialize the PDF file!
-
-
-                try
-                {
-                    //outputPath = @"C:\Users\Meir\Downloads\ABISample\OutputSample.pdf";
-                    pdfForm.File.Save(path, SerializationModeEnum.Standard);
-                }
-                catch (Exception z)
-                {
-                    Console.WriteLine("File writing failed: " + z.Message);
-                    Console.WriteLine(z.StackTrace);
-                }
-                Console.WriteLine("\nFile Created: ");
-            }
+            
+            */
+        }
 
        
     }
     }
+
 
