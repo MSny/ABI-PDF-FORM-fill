@@ -41,7 +41,7 @@ namespace WindowsFormsApplication5
         //Select Pdf 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-           
+            PdfReader.unethicalreading = true;
             this.PDFPath = openFileDialog1.FileName;
             PdfReader reader = new PdfReader(this.PDFPath);
             AcroFields form = reader.AcroFields;
@@ -127,21 +127,33 @@ namespace WindowsFormsApplication5
 
         private void button3_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.ShowDialog();
-            path = saveFileDialog1.FileName;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = "PDF files|*.pdf",
+                DefaultExt = "pdf",
+                AddExtension = true
+            };
+           saveFileDialog1.ShowDialog();
+           path = saveFileDialog1.FileName;
 
             using (PdfStamper stamper = new PdfStamper(pdfForm, new FileStream(path, FileMode.Create)))
             {
                 AcroFields fields = stamper.AcroFields;
 
+                String[] checkboxstates = fields.GetAppearanceStates("topmostSubform[0].Page1[0].CheckBox2[0]");
+
                 // set form fields
                 foreach (KeyValuePair<string, AcroFields.Item> kvp in fields.Fields)
                 {
                     count++;
-                    fields.SetField(formsNtype[count-1], "TODAY");
-                    
+                   // fields.SetField(formsNtype[count-1], parsedCSVData[count][0]);
+                    fields.SetField("topmostSubform[0].Page1[0].Boiler_Make___Model[0]", "Yes");
+                    // ABI FORM CHECKBOX FILL VALUE fields.SetField("Check Box6", "Yes");
+                    fields.SetField("topmostSubform[0].Page1[0].CheckBox2[0]", "1");
+                    fields.SetField("topmostSubform[0].Page1[0].LocationFloor[0]", "1");
+                    Console.Write(formsNtype[count - 1] + System.Environment.NewLine);
                 }
+
                
                // fields.SetField("BOILER", "HOT");
                 //fields.SetField("", "12345");
