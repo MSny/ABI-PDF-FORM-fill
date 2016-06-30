@@ -10,3 +10,5 @@ c:\users\meir\documents\visual studio 2015\Projects\WindowsFormsApplication5\Win
 c:\users\meir\documents\visual studio 2015\Projects\WindowsFormsApplication5\WindowsFormsApplication5\bin\Debug\PDFClown.dll
 C:\Users\Meir\Documents\Visual Studio 2015\Projects\WindowsFormsApplication5\WindowsFormsApplication5\bin\Debug\itextsharp.dll
 C:\Users\Meir\Documents\Visual Studio 2015\Projects\WindowsFormsApplication5\WindowsFormsApplication5\bin\Debug\itextsharp.xml
+C:\Users\Meir\Documents\Visual Studio 2015\Projects\WindowsFormsApplication5\WindowsFormsApplication5\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Meir\Documents\Visual Studio 2015\Projects\WindowsFormsApplication5\WindowsFormsApplication5\bin\Debug\Newtonsoft.Json.xml

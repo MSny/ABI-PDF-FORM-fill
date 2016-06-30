@@ -64,7 +64,7 @@
             // openFileDialog2
             // 
             this.openFileDialog2.FileName = "openFileDialog1";
-            this.openFileDialog2.Filter = "CSV files|*.csv";
+            this.openFileDialog2.Filter = "JSON files|*.json";
             this.openFileDialog2.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog2_FileOk);
             // 
             // button3

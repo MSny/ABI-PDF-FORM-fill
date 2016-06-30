@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 
 using iTextSharp;
@@ -30,7 +32,7 @@ namespace WindowsFormsApplication5
         List<object[]> parsedPDFData = new List<object[]>();
         List<object> pdftextFields = new List<object>();
         dynamic pdfForm;
-        string CSVData;
+        dynamic JsonData;
         List<string> formsNtype = new List<string>();
         int count = 0;
         public Form1()
@@ -104,22 +106,10 @@ namespace WindowsFormsApplication5
         private void openFileDialog2_FileOk(object sender, CancelEventArgs e)
         {
             this.CSVPath = openFileDialog2.FileName;
-            TextFieldParser parser = new TextFieldParser(this.CSVPath);
-            parser.TextFieldType = FieldType.Delimited;
-            parser.SetDelimiters(",");
-            while (!parser.EndOfData)
-            {
-                //Processing row
-                string[] fields = parser.ReadFields();
-                foreach (string field in fields)
-                {
-                    //TODO: Process field
-                    parsedCSVData.Add(fields);
-                }
-            }
-
-            parser.Close();
-            Console.WriteLine(parsedCSVData);
+            JObject parsedData = JObject.Parse(File.ReadAllText(CSVPath));
+            
+            JsonData = parsedData;
+            Console.WriteLine(parsedData);
 
         }
 
@@ -135,7 +125,7 @@ namespace WindowsFormsApplication5
             };
            saveFileDialog1.ShowDialog();
            path = saveFileDialog1.FileName;
-
+            Console.Write(JsonData);
             using (PdfStamper stamper = new PdfStamper(pdfForm, new FileStream(path, FileMode.Create)))
             {
                 AcroFields fields = stamper.AcroFields;
@@ -147,7 +137,7 @@ namespace WindowsFormsApplication5
                 {
                     count++;
                    // fields.SetField(formsNtype[count-1], parsedCSVData[count][0]);
-                    fields.SetField("topmostSubform[0].Page1[0].Boiler_Make___Model[0]", "Yes");
+                    fields.SetField("topmostSubform[0].Page1[0].Boiler_Make___Model[0]", JsonData.person.name.ToString());
                     // ABI FORM CHECKBOX FILL VALUE fields.SetField("Check Box6", "Yes");
                     fields.SetField("topmostSubform[0].Page1[0].CheckBox2[0]", "1");
                     fields.SetField("topmostSubform[0].Page1[0].LocationFloor[0]", "1");
