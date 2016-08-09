@@ -229,121 +229,52 @@ namespace WindowsFormsApplication5
             {
                 AcroFields fields = stamper.AcroFields;
                 // fields.GenerateAppearances = true;
-                String[] checkboxstates = fields.GetAppearanceStates("topmostSubform[0].Page1[0].CheckBox2[0]");
+               // String[] checkboxstates = fields.GetAppearanceStates("topmostSubform[0].Page1[0].CheckBox2[0]");
 
 
                 // set form fields
                 foreach (KeyValuePair<string, AcroFields.Item> kvp in fields.Fields)
                 {
+                    
                     count++;
                     if (formsNtype[count - 1].StartsWith("topmostSubform"))
                     {
                         Console.Write(formsNtype[count - 1].Substring(27, formsNtype[count - 1].Length - 27) + System.Environment.NewLine);
+                        currentCheckbox = null;
+                        currentItem = null;
                     }
                     else
                     {
-                    Console.Write(formsNtype[count - 1] + System.Environment.NewLine);
+                        Console.Write(formsNtype[count - 1] + System.Environment.NewLine);
+                        currentCheckbox = "0";
+                        currentItem = "0";
                     }
                     
                     switch (fields.GetFieldType(kvp.Key))
                     {
                         case AcroFields.FIELD_TYPE_CHECKBOX:
+                             currentCheckbox = string.IsNullOrEmpty(currentCheckbox) ? formsNtype[count - 1].Substring(27, formsNtype[count - 1].Length - 27): fields.GetTranslatedFieldName(kvp.Key);
                             //currentCheckbox = fields.GetTranslatedFieldName(kvp.Key);
-                            //checkboxCount.Add(translatedCheckboxName);
-                            //fields.SetField(currentCheckbox, JsonData.checkboxes[currentCheckbox].ToString());
+                            fields.SetField(currentCheckbox, JsonData[inputFileName][currentCheckbox].ToString());
                             break;
                         case AcroFields.FIELD_TYPE_COMBO:
                         case AcroFields.FIELD_TYPE_LIST:
                         case AcroFields.FIELD_TYPE_RADIOBUTTON:
+                            String[] radioStates = fields.GetAppearanceStates("topmostSubform[0].Page1[0].RadioButtonList[0]");
+                            string currentRadio =  formsNtype[count - 1].Substring(27, formsNtype[count - 1].Length - 27) ;
+                            fields.SetField(currentRadio, JsonData[inputFileName][currentRadio].ToString());
+                            break;
                         case AcroFields.FIELD_TYPE_NONE:
                         case AcroFields.FIELD_TYPE_PUSHBUTTON:
                         case AcroFields.FIELD_TYPE_SIGNATURE:
                         case AcroFields.FIELD_TYPE_TEXT:
+                            currentItem = string.IsNullOrEmpty(currentItem) ? formsNtype[count - 1].Substring(27, formsNtype[count - 1].Length - 27): fields.GetTranslatedFieldName(kvp.Key);
+
                            // currentItem = fields.GetTranslatedFieldName(kvp.Key);
-                           // fields.SetField(currentItem, JsonData.abi[currentItem].ToString());
+                             fields.SetField(currentItem, JsonData[inputFileName][currentItem].ToString());
                             break;
 
-                            /*if (inputFileName == "bo9.pdf")
-                            {
-                                count++;
-                                fields.SetField("topmostSubform[0].Page1[0].Boiler_Make___Model[0]", JsonData.person.name.ToString());
-                                fields.SetField("topmostSubform[0].Page1[0].CheckBox2[0]", "1");
-                                fields.SetField("topmostSubform[0].Page1[0].LocationFloor[0]", "1");
-                            }
-                            if (inputFileName == "bo13e.pdf")
-                            {
-                                count++;
-                                fields.SetField("topmostSubform[0].Page1[0].Boiler_Make___Model[0]", JsonData.person.name.ToString());
-                                fields.SetField("topmostSubform[0].Page1[0].CheckBox2[0]", "1");
-                                fields.SetField("topmostSubform[0].Page1[0].LocationFloor[0]", "1");
-                            }
-                            if (inputFileName == "bo13.pdf")
-                            {
-                                count++;
-                                fields.SetField("topmostSubform[0].Page1[0].Boiler_Make___Model[0]", JsonData.person.name.ToString());
-                                fields.SetField("topmostSubform[0].Page1[0].CheckBox2[0]", "1");
-                                fields.SetField("topmostSubform[0].Page1[0].LocationFloor[0]", "1");
-                            }
-                            if (inputFileName == "ABI FORM.pdf")
-                            {
-                                count++;
-
-                                fields.SetField(formsNtype[0], JsonData.customerInfo.date.ToString());
-                                fields.SetField(formsNtype[1], JsonData.customerInfo.address.ToString());
-                                fields.SetField(formsNtype[2], JsonData.company.ToString());
-                                fields.SetField(formsNtype[3], JsonData.Boiler.id.ToString());
-                                fields.SetField(formsNtype[4], JsonData.Boiler.number.ToString());
-                                fields.SetField(formsNtype[5], JsonData.Boiler.manufacturer.ToString());
-                                fields.SetField(formsNtype[6], JsonData.Boiler.model.ToString());
-                                //fields.SetField(formsNtype[0], JsonData.person.name.ToString());
-                                /*
-                                fields.SetField("Check Box1", JsonData.checkboxes["Check Box1"].ToString());
-                                fields.SetField("Check Box2", JsonData.checkboxes["Check Box2"].ToString());
-                                fields.SetField("Check Box3", JsonData.checkboxes["Check Box3"].ToString());
-                                fields.SetField("Check Box4", JsonData.checkboxes["Check Box4"].ToString());
-                                fields.SetField("Check Box5", JsonData.checkboxes["Check Box5"].ToString());
-                                fields.SetField("Check Box6", JsonData.checkboxes["Check Box6"].ToString());
-                                fields.SetField("Check Box7", JsonData.checkboxes["Check Box7"].ToString());
-                                fields.SetField("Check Box8", JsonData.checkboxes["Check Box8"].ToString());
-                                fields.SetField("Check Box9", JsonData.checkboxes["Check Box9"].ToString());
-                                fields.SetField("Check Box10", JsonData.checkboxes["Check Box10"].ToString());
-                                fields.SetField("Check Box11", JsonData.checkboxes["Check Box11"].ToString());
-                                fields.SetField("Check Box12", JsonData.checkboxes["Check Box13"].ToString());
-                                fields.SetField("Check Box13", JsonData.checkboxes["Check Box14"].ToString());
-                                fields.SetField("Check Box14", JsonData.checkboxes["Check Box15"].ToString());
-                                fields.SetField("Check Box15", JsonData.checkboxes["Check Box16"].ToString());
-                                fields.SetField("Check Box16", JsonData.checkboxes["Check Box17"].ToString());
-                                fields.SetField("Check Box17", JsonData.checkboxes["Check Box18"].ToString());
-                                fields.SetField("Check Box18", JsonData.checkboxes["Check Box19"].ToString());
-                                fields.SetField("Check Box19", JsonData.checkboxes["Check Box19"].ToString());
-                                fields.SetField("Check Box20", JsonData.checkboxes["Check Box21"].ToString());
-                                fields.SetField("Check Box21", JsonData.checkboxes["Check Box21"].ToString());
-                                fields.SetField("Check Box22", JsonData.checkboxes["Check Box22"].ToString());
-                                fields.SetField("Check Box23", JsonData.checkboxes["Check Box23"].ToString());
-                                fields.SetField("Check Box24", JsonData.checkboxes["Check Box24"].ToString());
-                                fields.SetField("Check Box25", JsonData.checkboxes["Check Box25"].ToString());
-                                fields.SetField("Check Box26", JsonData.checkboxes["Check Box26"].ToString());
-                                fields.SetField("Check Box27", JsonData.checkboxes["Check Box27"].ToString());
-                                fields.SetField("Check Box28", JsonData.checkboxes["Check Box28"].ToString());
-                                fields.SetField("Check Box29", JsonData.checkboxes["Check Box29"].ToString());
-                                fields.SetField("Check Box30", JsonData.checkboxes["Check Box30"].ToString());
-                                fields.SetField("Check Box31", JsonData.checkboxes["Check Box31"].ToString());
-                                fields.SetField("Check Box32", JsonData.checkboxes["Check Box32"].ToString());
-                                fields.SetField("Check Box33", JsonData.checkboxes["Check Box33"].ToString());
-                                fields.SetField("Check Box34", JsonData.checkboxes["Check Box34"].ToString());
-                                fields.SetField("Check Box35", JsonData.checkboxes["Check Box35"].ToString());
-                                fields.SetField("Check Box36", JsonData.checkboxes["Check Box36"].ToString());
-                                fields.SetField("Check Box37", JsonData.checkboxes["Check Box37"].ToString());
-                                fields.SetField("Check Box38", JsonData.checkboxes["Check Box38"].ToString());
-                                fields.SetField("Check Box39", JsonData.checkboxes["Check Box39"].ToString());
-                                fields.SetField("Check Box40", JsonData.checkboxes["Check Box40"].ToString());
-                                fields.SetField("Check Box41", JsonData.checkboxes["Check Box41"].ToString());
-                                fields.SetField("Check Box42", JsonData.checkboxes["Check Box42"].ToString());
-                                */
-                                //ABI FORM CHECKBOX FILL VALUE 
-                               
-
-                                //fields.SetField("Check Box7", "Yes");
+                           
                                 //fields.GenerateAppearances = true;
 
                                 // Console.Write(formsNtype[count - 1] + System.Environment.NewLine);
