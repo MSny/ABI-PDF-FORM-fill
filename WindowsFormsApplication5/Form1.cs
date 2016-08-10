@@ -140,7 +140,7 @@ namespace WindowsFormsApplication5
         {
             string path = @"C:\Users\Meir\Downloads\ABISample\Copy of Boiler Batch OP-42 Form v01,2013 BLANK.XLSX";
             oXL = new Microsoft.Office.Interop.Excel.Application();
-            oXL.Visible = true;
+            //oXL.Visible = true;
             oXL.DisplayAlerts = false;
             mWorkBook = oXL.Workbooks.Open(path, 0, false, 5, "", "", false, Microsoft.Office.Interop.Excel.XlPlatform.xlWindows, "", true, false, 0, true, false, false);
             //Get all the sheets in the workbook
@@ -151,20 +151,20 @@ namespace WindowsFormsApplication5
             // mWSheet2 = (Microsoft.Office.Interop.Excel.Worksheet)mWorkSheets.get_Item("csv");
             Microsoft.Office.Interop.Excel.Range range = mWSheet1.UsedRange;
             // Edit values for OP-42
-            mWSheet1.Cells[5, 20] = data.Boiler.id.ToString();
-            mWSheet1.Cells[6, 21] = data.customerInfo.date.ToString();
+            mWSheet1.Cells[5, 20] = data.id.ToString();
+            mWSheet1.Cells[6, 21] = data.date.ToString();
             mWSheet1.Cells[8, 7] = data.company.ToString();
-            mWSheet1.Cells[10, 7] = data.customerInfo.name.ToString();
-            mWSheet1.Cells[12, 6] = data.Boiler.id.ToString();
-            mWSheet1.Cells[12, 9] = data.customerInfo.job.ToString();
-            mWSheet1.Cells[14, 7] = data.customerInfo.address.ToString();
+            mWSheet1.Cells[10, 7] = data.name.ToString();
+            mWSheet1.Cells[12, 6] = data.id.ToString();
+            mWSheet1.Cells[12, 9] = data.job.ToString();
+            mWSheet1.Cells[14, 7] = data.address.ToString();
             //mWSheet1.Cells[15, 20] = data.number.ToString();
             //mWSheet1.Cells[17, 21] = data.number.ToString();
-            mWSheet1.Cells[17, 10] = data.customerInfo.date.ToString();
-            mWSheet1.Cells[16, 5] = data.customerInfo.name_2.ToString();
-            mWSheet1.Cells[18, 10] = data.customerInfo.phone.ToString();
-            mWSheet1.Cells[18, 5] = data.customerInfo.email.ToString();
-            mWSheet1.Cells[30, 10] = data.customerInfo.date.ToString();
+            mWSheet1.Cells[17, 10] = data.date.ToString();
+            mWSheet1.Cells[16, 5] = data.name_2.ToString();
+            mWSheet1.Cells[18, 10] = data.phone.ToString();
+            mWSheet1.Cells[18, 5] = data.email.ToString();
+            mWSheet1.Cells[30, 10] = data.date.ToString();
             // Edit values for csv
 
             int colCount = range.Columns.Count;
@@ -172,26 +172,26 @@ namespace WindowsFormsApplication5
             // bottom data 
             for (int index = 1; index < 10; index++)
             {
-                mWSheet2.Cells[0 + index, 1] = data.csv.boro.ToString();
-                mWSheet2.Cells[0 + index, 2] = data.csv.device.ToString();
-                mWSheet2.Cells[0 + index, 3] = data.csv.md.ToString();
-                mWSheet2.Cells[0 + index, 4] = data.csv.serial.ToString();
-                mWSheet2.Cells[0 + index, 5] = data.csv.house.ToString();
-                mWSheet2.Cells[0 + index, 6] = data.csv.street.ToString();
-                mWSheet2.Cells[0 + index, 7] = data.csv.block.ToString();
-                mWSheet2.Cells[0 + index, 8] = data.csv.lot.ToString();
-                mWSheet2.Cells[0 + index, 9] = data.csv.date.ToString();
-                mWSheet2.Cells[0 + index, 10] = data.csv.j.ToString();
-                mWSheet2.Cells[0 + index, 11] = data.csv.k.ToString();
-                mWSheet2.Cells[0 + index, 12] = data.csv.l.ToString();
-                mWSheet2.Cells[0 + index, 13] = data.csv.m.ToString();
-                mWSheet2.Cells[0 + index, 14] = data.csv.n.ToString();
-                mWSheet2.Cells[0 + index, 15] = data.csv.o.ToString();
-                mWSheet2.Cells[0 + index, 16] = data.csv.p.ToString();
-                mWSheet2.Cells[0 + index, 17] = data.csv.q.ToString();
-                mWSheet2.Cells[0 + index, 18] = data.csv.r.ToString();
-                mWSheet2.Cells[0 + index, 19] = data.csv.location.ToString();
-                mWSheet2.Cells[0 + index, 20] = data.csv.t.ToString();
+                mWSheet2.Cells[0 + index, 1] = data.boro.ToString();
+                mWSheet2.Cells[0 + index, 2] = data.device.ToString();
+                mWSheet2.Cells[0 + index, 3] = data.md.ToString();
+                mWSheet2.Cells[0 + index, 4] = data.serial.ToString();
+                mWSheet2.Cells[0 + index, 5] = data.house.ToString();
+                mWSheet2.Cells[0 + index, 6] = data.street.ToString();
+                mWSheet2.Cells[0 + index, 7] = data.block.ToString();
+                mWSheet2.Cells[0 + index, 8] = data.lot.ToString();
+                mWSheet2.Cells[0 + index, 9] = data.date.ToString();
+                mWSheet2.Cells[0 + index, 10] = data.j.ToString();
+                mWSheet2.Cells[0 + index, 11] = data.k.ToString();
+                mWSheet2.Cells[0 + index, 12] = data.l.ToString();
+                mWSheet2.Cells[0 + index, 13] = data.m.ToString();
+                mWSheet2.Cells[0 + index, 14] = data.n.ToString();
+                mWSheet2.Cells[0 + index, 15] = data.o.ToString();
+                mWSheet2.Cells[0 + index, 16] = data.p.ToString();
+                mWSheet2.Cells[0 + index, 17] = data.q.ToString();
+                mWSheet2.Cells[0 + index, 18] = data.r.ToString();
+                mWSheet2.Cells[0 + index, 19] = data.location.ToString();
+                mWSheet2.Cells[0 + index, 20] = data.t.ToString();
             }
             SaveFileDialog saveFileDialog2 = new SaveFileDialog
             {
@@ -255,14 +255,14 @@ namespace WindowsFormsApplication5
                         case AcroFields.FIELD_TYPE_CHECKBOX:
                              currentCheckbox = string.IsNullOrEmpty(currentCheckbox) ? formsNtype[count - 1].Substring(27, formsNtype[count - 1].Length - 27): fields.GetTranslatedFieldName(kvp.Key);
                             //currentCheckbox = fields.GetTranslatedFieldName(kvp.Key);
-                            fields.SetField(currentCheckbox, JsonData[inputFileName][currentCheckbox].ToString());
+                            fields.SetField(currentCheckbox, JsonData[currentCheckbox].ToString());
                             break;
                         case AcroFields.FIELD_TYPE_COMBO:
                         case AcroFields.FIELD_TYPE_LIST:
                         case AcroFields.FIELD_TYPE_RADIOBUTTON:
                             String[] radioStates = fields.GetAppearanceStates("topmostSubform[0].Page1[0].RadioButtonList[0]");
                             string currentRadio =  formsNtype[count - 1].Substring(27, formsNtype[count - 1].Length - 27) ;
-                            fields.SetField(currentRadio, JsonData[inputFileName][currentRadio].ToString());
+                            fields.SetField(currentRadio, JsonData[currentRadio].ToString());
                             break;
                         case AcroFields.FIELD_TYPE_NONE:
                         case AcroFields.FIELD_TYPE_PUSHBUTTON:
@@ -271,7 +271,7 @@ namespace WindowsFormsApplication5
                             currentItem = string.IsNullOrEmpty(currentItem) ? formsNtype[count - 1].Substring(27, formsNtype[count - 1].Length - 27): fields.GetTranslatedFieldName(kvp.Key);
 
                            // currentItem = fields.GetTranslatedFieldName(kvp.Key);
-                             fields.SetField(currentItem, JsonData[inputFileName][currentItem].ToString());
+                             fields.SetField(currentItem, JsonData[currentItem].ToString());
                             break;
 
                            
